@@ -26,7 +26,7 @@ public class Employee  extends UserApp{
 
     @Builder
 
-    public Employee(UUID id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified, Adress adress, String occupation, String companyInfo) {
+    public Employee(long id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified, Adress adress, String occupation, String companyInfo) {
         super(id, email, password, name, surname, phoneNumber, gender, isVerified);
         this.adress = adress;
         this.occupation = occupation;

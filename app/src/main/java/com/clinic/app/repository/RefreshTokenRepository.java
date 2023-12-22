@@ -1,0 +1,18 @@
+package com.clinic.app.repository;
+
+import com.clinic.app.model.RefreshToken;
+import com.clinic.app.model.UserApp;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+    Optional<RefreshToken> findByToken(String token);
+
+    @Modifying
+    int deleteByUser(UserApp user);
+}

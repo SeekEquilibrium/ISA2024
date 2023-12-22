@@ -20,7 +20,10 @@ import java.util.UUID;
 public class UserApp implements UserDetails {
 
     @Id
-    private  UUID id = UUID.randomUUID();
+    @SequenceGenerator(name = "userAppSeqGen", sequenceName = "userAppSeq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "userAppSeqGen")
+    @Column(name="id", unique=true, nullable=false)
+    private  long id;
     @Column(unique = true)
     private String email;
     @Column
@@ -37,7 +40,7 @@ public class UserApp implements UserDetails {
     @Column
     private boolean isVerified;
 
-    public UserApp(UUID id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified) {
+    public UserApp(long id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified) {
         this.id = id;
         this.email = email;
         this.password = password;
