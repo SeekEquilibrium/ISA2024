@@ -1,0 +1,36 @@
+.navbar {
+    position: fixed;
+    top:0;
+    width: 100%;
+    z-index: 99999;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.navbar-logo {
+    margin-top: auto;
+    margin-bottom: auto;
+    
+}
+.navbar-logo img{
+    max-width: 40%;
+    height: auto;
+    
+}
+
+.middle{
+    margin: 0 10px 0 10px
+}
+.right{
+    margin-right: 1.5%;
+}
+.mat-mdc-raised-button.right{
+    background-color: #5bb749;
+    color: white;
+    font-size: 105%;
+}
+span{
+    margin-left: 1.5%;
+}

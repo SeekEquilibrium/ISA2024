@@ -1,0 +1,91 @@
+.hero {
+    height: 115dvh;
+    background-image: url(../../../assets/img/notebook-pen-near-medical-supplies.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+}
+.hero-img {
+    height: fit-content;
+    margin-left: 13vh;
+    margin-top: 30vh;
+    position: relative;
+
+}
+.hero-img img {
+    width: 70vh;
+
+}
+
+.hero-text {
+    max-height: 100dvh;
+    width: fit-content;
+    padding-top: 35vh;
+    margin-left: 20vh;
+    padding-bottom: 10vh;
+    justify-content: center;
+    overflow-wrap: break-word;
+}
+.hero h1 {
+    font-size: 96px;
+    line-height: 106px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.hero p {
+    font-size: 18px;
+    line-height: 30px;
+    margin: 10px;
+    text-align: left;
+}
+
+.explore {
+    height: 110dvh;
+    background-color: #89CFF0;
+    display: flex ;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.explore-carosel{
+    padding-left: 150px;
+
+}
+
+.explore-text{
+    margin-right: 30dvh;
+    margin-left: 30dvh;
+    padding-right: auto;
+    display:inline-block;
+    justify-content: center;
+    
+    
+}
+
+.explore-text h1{
+    font-size: 56px;
+    line-height: 50px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: left;
+    color: white;
+    -webkit-text-stroke: 0.9px black;
+    
+    
+}
+
+.explore-text button{
+    width: 20dvh;
+    height: 6dvh;
+    display: block;
+}
+.btn-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-left: -90px;
+}
