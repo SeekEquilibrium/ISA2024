@@ -9,7 +9,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    overflow: hidden;
+    overflow: auto;
   }
   
   mat-card {
@@ -31,6 +31,14 @@
     display: block;
     width: 80%;
     margin: 20px auto;
+  }
+
+  .password-input {
+    color: #e82d4a;
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: -1rem;
+    margin-bottom: 0.5rem;
   }
   
   

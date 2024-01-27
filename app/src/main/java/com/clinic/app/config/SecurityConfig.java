@@ -64,6 +64,7 @@ public class SecurityConfig {
         http
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
@@ -74,8 +75,8 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/auth/log-in").and().ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/swagger-ui.html/**",
-                "/swagger-ui","/configuration/**","/swagger-resources/**", "/v2/api-docs", "/**/*.html", "/**/*.css", "/**/*.js");
+        return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/auth/login","/auth/register").and().ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico",
+                "/swagger-ui","/swagger-ui.html","/swagger-ui/**" , "/swagger-resources","/configuration/ui","/configuration/security","/configuration/**","/swagger-resources/**", "/v2/api-docs", "/**/*.html", "/**/*.css", "/**/*.js");
     }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

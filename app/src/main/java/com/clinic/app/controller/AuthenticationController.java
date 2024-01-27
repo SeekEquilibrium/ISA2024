@@ -3,10 +3,7 @@ package com.clinic.app.controller;
 import com.clinic.app.converter.EmployeeDTOConv;
 import com.clinic.app.dto.EmployeeDTO;
 import com.clinic.app.dto.JWTAuthDTO;
-import com.clinic.app.model.Employee;
-import com.clinic.app.model.RefreshToken;
-import com.clinic.app.model.UserApp;
-import com.clinic.app.model.UserToken;
+import com.clinic.app.model.*;
 import com.clinic.app.security.TokenHandler;
 import com.clinic.app.service.RefreshTokenService;
 import com.clinic.app.service.UserAppService;
@@ -19,10 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseCookie;
 
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +46,7 @@ public class AuthenticationController {
         if (userAppservice.findbyEmail(request.getEmail()) == null) {
             Employee employee= employeeDTOConv.DTOToEmployee(request);
             employee.setVerified(false);
+            employee.setRole(Role.EMPLOYEE);
             userAppservice.register(employee);
             return new ResponseEntity<>(employee, HttpStatus.CREATED);
         } else {
@@ -65,6 +60,7 @@ public class AuthenticationController {
         UserApp user = (UserApp) authentication.getPrincipal();
         String jwt = this.tokenHandler.generateToken(user.getUsername());
         ResponseCookie jwtCookie = tokenHandler.generateJwtCookie(user);
+
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
         ResponseCookie jwtRefreshCookie = tokenHandler.generateRefreshJwtCookie(refreshToken.getToken());
         return ResponseEntity.ok()
@@ -77,7 +73,7 @@ public class AuthenticationController {
     public ResponseEntity<?> logoutUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!Objects.equals(principal.toString(), "anonymousUser")) {
-            refreshTokenService.deleteByUserId(((UserApp) principal).getId());
+            refreshTokenService.deleteByUserId(((Employee) principal).getId());
         }
 
         ResponseCookie jwtCookie = tokenHandler.getCleanJwtCookie();
@@ -89,6 +85,17 @@ public class AuthenticationController {
                 .build();
     }
 
-
+    @PostMapping("verify/{email}")
+    public ResponseEntity<?> verify(@PathVariable String email){
+        UserApp user = userAppservice.findbyEmail(email);
+        if(user== null){
+            return ResponseEntity.status(404).body("Account with the given email does not exist.");
+        }else if(user.isVerified()) {
+            return ResponseEntity.status(403).body("Account already verified.");
+        } else {
+            userAppservice.verifyAccount(user);
+            return ResponseEntity.ok().build();
+        }
+    }
 
 }

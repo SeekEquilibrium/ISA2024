@@ -1,6 +1,7 @@
 package com.clinic.app.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,8 +40,11 @@ public class UserApp implements UserDetails {
     private Gender gender;
     @Column
     private boolean isVerified;
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
-    public UserApp(long id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified) {
+    public UserApp(long id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -49,41 +53,39 @@ public class UserApp implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.isVerified = isVerified;
+        this.role = role;
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.getEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return isVerified;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return isVerified;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return isVerified;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isVerified;
     }
 
 
