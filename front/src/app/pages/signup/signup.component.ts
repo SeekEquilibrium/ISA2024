@@ -13,9 +13,7 @@ import {AbstractControl,FormBuilder,FormControl,FormGroup,Validators,ReactiveFor
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/AuthService';
 import { UserAppService } from '../../services/UserAppService';
-import { ApiService } from '../../services/ApiService';
-import { ConfigService } from '../../services/ConfigService';
-import { error } from 'console';
+
 
 @Component({
   selector: 'app-signup',
@@ -106,7 +104,7 @@ export class SignupComponent implements OnInit {
   onSubmit_register(): void {
     this.router.navigate(["/"])
     this.authService.register(this.form_register.value).subscribe(data => {
-        console.log(data);
+        
       },
       error => {
         console.log(error);
@@ -114,10 +112,12 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit_login(): void {
-    this.router.navigate(["/"])
+    
     this.authService.login(this.form_login.value).subscribe((data)=>{
+      this.router.navigate(["/"]);
       this.userAppService.getActiveUser().subscribe(user => {
         this.userAppService.currentUser = user;
+        console.log(data);
       })
     },
     (error)=>{

@@ -60,6 +60,7 @@ export class ApiService {
       headers: customHeaders || this.headers,
     });
 
+    // @ts-ignore
     return this.http.request(req).pipe(map(res => {
       return res;
     }));

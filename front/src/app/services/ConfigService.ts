@@ -7,7 +7,8 @@ export class ConfigService {
 
   private _api_url = 'http://localhost:8080';
   private _auth_url = 'http://localhost:8080/auth';
-  public users_url = this._api_url + '/users';
+  public users_url = this._api_url + '/usersApp';
+  public employee_url=this._api_url + '/employee';
   public log_out_url = this._auth_url + '/logout';
   public refresh_token_url = this._auth_url + '/refresh-token';
   public verification_url = this._auth_url + '/verify';

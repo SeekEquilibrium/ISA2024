@@ -22,11 +22,11 @@ type Employee = {
     phoneNumber: string;
     email: string;
     isVerified: boolean;
-    occupation:String;
-    companyInfo:String;
-    street:String;
-    City: String;
-    Country:String;
+    occupation:string;
+    companyInfo:string;
+    street:string;
+    City: string;
+    Country:string;
   };
 
   type Credentials = {

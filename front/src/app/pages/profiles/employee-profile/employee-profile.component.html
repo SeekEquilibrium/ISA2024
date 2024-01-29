@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="cards" *ngIf="!editEnabled">
+        <mat-card class="profile-card">
+          <mat-card-title class="profile-title"
+            >{{ employee.name }} {{ employee.surname }}
+          </mat-card-title>
+          <mat-card-content>
+            <h2>Personal information</h2>
+            <p>
+              > Gender:
+              <b>{{ employee.gender == "FEMALE" ? "Female" : "Male" }}</b>
+            </p>
+            <p>
+              > Occupation: <b>{{ employee.occupation }}</b>
+            </p>
+            <p>
+              > Associated institution: <b>{{ employee.companyInfo }}</b>
+            </p>
+            <h2>Contact</h2>
+            <p>
+              > Home address:
+              <b
+                >{{ employee.street }}, {{ employee.City }},
+                {{ employee.Country }}</b
+              >
+            </p>
+            <p>
+              > Email: <b>{{ employee.email }}</b>
+            </p>
+            <p>
+              > Phone number: <b>{{ employee.phoneNumber }}</b>
+            </p>
+            
+          </mat-card-content>
+        </mat-card>
+      </div>
+</div>

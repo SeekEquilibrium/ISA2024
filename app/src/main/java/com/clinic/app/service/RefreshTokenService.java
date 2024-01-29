@@ -41,6 +41,15 @@ public class RefreshTokenService {
         }
     }
 
+    public RefreshToken verifyExpiration(RefreshToken token) throws Exception {
+        if (token.getExpiryDate().compareTo(new Date().getTime()) < 0) {
+            refreshTokenRepository.delete(token);
+            throw new Exception("Refresh token expired");
+        } else {
+            return token;
+        }
+    }
+
     @Transactional
     public void deleteByUserId(Long userId) {
         Optional<UserApp> user = userAppRepository.findById(userId);

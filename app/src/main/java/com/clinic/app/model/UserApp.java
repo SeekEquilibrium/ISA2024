@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -40,8 +42,8 @@ public class UserApp implements UserDetails {
     private Gender gender;
     @Column
     private boolean isVerified;
-    @Column
-    @Enumerated(value = EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
     public UserApp(long id, String email, String password, String name, String surname, String phoneNumber, Gender gender, boolean isVerified, Role role) {
@@ -56,10 +58,12 @@ public class UserApp implements UserDetails {
         this.role = role;
     }
 
-    @Override
     @JsonIgnore
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(this.role);
+        return roles;
     }
 
 
@@ -87,6 +91,7 @@ public class UserApp implements UserDetails {
     public boolean isEnabled() {
         return isVerified;
     }
+
 
 
 }

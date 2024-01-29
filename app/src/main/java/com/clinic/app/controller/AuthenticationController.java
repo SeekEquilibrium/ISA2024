@@ -6,9 +6,9 @@ import com.clinic.app.dto.JWTAuthDTO;
 import com.clinic.app.model.*;
 import com.clinic.app.security.TokenHandler;
 import com.clinic.app.service.RefreshTokenService;
+import com.clinic.app.service.RoleService;
 import com.clinic.app.service.UserAppService;
 import io.swagger.annotations.Api;
-import org.apache.catalina.Authenticator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseCookie;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -31,13 +33,15 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenHandler tokenHandler;
     private final RefreshTokenService refreshTokenService;
+    private final RoleService roleService;
 
-    public AuthenticationController(UserAppService userAppservice , EmployeeDTOConv employeeDTOConv, AuthenticationManager authenticationManager, TokenHandler tokenHandler, RefreshTokenService refreshTokenService) {
+    public AuthenticationController(UserAppService userAppservice , EmployeeDTOConv employeeDTOConv, AuthenticationManager authenticationManager, TokenHandler tokenHandler, RefreshTokenService refreshTokenService , RoleService roleService) {
         this.userAppservice = userAppservice;
         this.employeeDTOConv = employeeDTOConv;
         this.authenticationManager = authenticationManager;
         this.tokenHandler = tokenHandler;
         this.refreshTokenService = refreshTokenService;
+        this.roleService= roleService;
     }
 
 
@@ -46,7 +50,7 @@ public class AuthenticationController {
         if (userAppservice.findbyEmail(request.getEmail()) == null) {
             Employee employee= employeeDTOConv.DTOToEmployee(request);
             employee.setVerified(false);
-            employee.setRole(Role.EMPLOYEE);
+            employee.setRole(roleService.findByName("ROLE_EMPLOYEE"));
             userAppservice.register(employee);
             return new ResponseEntity<>(employee, HttpStatus.CREATED);
         } else {
@@ -58,9 +62,8 @@ public class AuthenticationController {
         Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserApp user = (UserApp) authentication.getPrincipal();
-        String jwt = this.tokenHandler.generateToken(user.getUsername());
+        String jwt = this.tokenHandler.generateToken(user.getUsername(),user.getRole());
         ResponseCookie jwtCookie = tokenHandler.generateJwtCookie(user);
-
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
         ResponseCookie jwtRefreshCookie = tokenHandler.generateRefreshJwtCookie(refreshToken.getToken());
         return ResponseEntity.ok()
@@ -96,6 +99,30 @@ public class AuthenticationController {
             userAppservice.verifyAccount(user);
             return ResponseEntity.ok().build();
         }
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) throws Exception {
+        String refreshToken = tokenHandler.getJwtRefreshFromCookies(request);
+
+        if ((refreshToken != null) && (refreshToken.length() > 0)) {
+            Optional<RefreshToken> optionalRefreshToken = refreshTokenService.findByToken(refreshToken);
+            if(optionalRefreshToken.isPresent()) {
+                RefreshToken token = optionalRefreshToken.get();
+                if(refreshTokenService.verifyExpiration(token) != null) {
+                    UserApp tokenUser = token.getUser();
+                    ResponseCookie jwtCookie = tokenHandler.generateJwtCookie(tokenUser);
+                    return ResponseEntity.ok()
+                            .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                            .header(HttpHeaders.SET_COOKIE, refreshToken)
+                            .build();
+                }
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
 }

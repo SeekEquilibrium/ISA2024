@@ -1,5 +1,10 @@
 package com.clinic.app.security;
 
+import java.util.Date;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+import com.clinic.app.model.Role;
 import com.clinic.app.model.UserApp;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -8,13 +13,11 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
-import java.util.Date;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+
 @Component
 @Slf4j
 public class TokenHandler {
-    @Value("spring-security-example")
+    @Value("app")
     private String APP_NAME;
     @Value("$tajna")
     public String SECRET;
@@ -30,12 +33,12 @@ public class TokenHandler {
     private final String jwtRefreshCookie = "refreshToken";
 
     public ResponseCookie generateJwtCookie(UserApp user) {
-        String jwt = generateTokenFromUsername(user.getEmail());
-        return generateCookie(jwtCookie, jwt, "/api");
+        String jwt = generateTokenFromUsername(user.getEmail(), user.getRole());
+        return generateCookie(jwtCookie, jwt, "/");
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/api/auth/refresh-token");
+        return generateCookie(jwtRefreshCookie, refreshToken, "/auth/refresh-token");
     }
 
     public String getJwtFromCookies(HttpServletRequest request) {
@@ -47,12 +50,12 @@ public class TokenHandler {
     }
 
     public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/").build();
         return cookie;
     }
 
     public ResponseCookie getCleanJwtRefreshCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/api/auth/refresh-token").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/auth/refresh-token").build();
         return cookie;
     }
 
@@ -79,11 +82,12 @@ public class TokenHandler {
         return false;
     }
 
-    public String generateTokenFromUsername(String username) {
+    public String generateTokenFromUsername(String username, Role role) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + EXPIRES_IN))
+                .claim("role", role.getName())
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
     }
@@ -100,12 +104,13 @@ public class TokenHandler {
             return null;
         }
     }
-    public String generateToken(String username) {
+    public String generateToken(String username, Role role) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
+                .claim("role", role.getName())
                 .setExpiration(generateExpirationDate())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
