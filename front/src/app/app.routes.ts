@@ -11,7 +11,7 @@ export const routes: Routes = [
     {path:'', component: HomeComponent},
     {path:'signup', component: SignupComponent},
     {path:'verify/:email', component:VerifyModalComponent},
-    {path:'profile', component:EmployeeProfileComponent , canActivate: [AuthGuard] ,providers:[AuthGuard]},
+    {path:'profile', component:EmployeeProfileComponent , canActivate: [AuthGuard] },
     {path:'profile/edit', component:EmployeeProfileComponent , canActivate: [RoleGuard], data:{expectedRole:'ROLE_EMPLOYEE'}},
 
 ];

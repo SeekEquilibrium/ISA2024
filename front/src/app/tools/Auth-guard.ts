@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/AuthService';
 
 
@@ -12,8 +12,8 @@ export class AuthGuard implements CanActivate {
         if(this.authService.tokenIsPresent()){
             return true;
         }
-
-        this.router.navigate(['/signup'], { queryParams: { returnUrl: state.url }});
+        console.log('pogodilo');
+        this.router.navigate(["/signup"]);
         return false;
     }
 }

@@ -58,6 +58,16 @@ public class UserApp implements UserDetails {
         this.role = role;
     }
 
+    public UserApp(long id , String name, String surname, String phoneNumber, Gender gender, boolean isVerified, Role role) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.isVerified = isVerified;
+        this.role = role;
+    }
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

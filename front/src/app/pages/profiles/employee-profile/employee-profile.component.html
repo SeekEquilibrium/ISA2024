@@ -1,37 +1,129 @@
 <div class="container">
-    <div class="cards" *ngIf="!editEnabled">
-        <mat-card class="profile-card">
-          <mat-card-title class="profile-title"
-            >{{ employee.name }} {{ employee.surname }}
+  <div class="cards" *ngIf="editEnabled">
+    <mat-card class="profile-card-edit">
+      <mat-card-title class="profile-title-edit">
+        <button mat-mini-fab  color="primary" (click)="goBack()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+      </mat-card-title>
+      <mat-card-content>
+        <form class="form-wrapper" [formGroup]="profileForm">
+          <h1>Edit your personal information</h1>
+          <mat-divider class="divider-top"></mat-divider>
+          <h2>Personal information</h2>
+
+          <div class="form-header-wrapper">
+            <p>Name</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="name" matInput type="text" />
+            </mat-form-field>
+          </div>
+        
+          <div class="form-header-wrapper">
+            <p>Surname</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="surname" matInput type="text" />
+            </mat-form-field>
+          </div>
+          
+          <div class="form-header-wrapper">
+            <p>Occupation</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="occupation" matInput type="text" />
+            </mat-form-field>
+          </div>
+           
+          <div class="form-header-wrapper">
+            <p>Company information</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="companyInfo" matInput type="text" />
+            </mat-form-field>
+          </div>
+          
+          <h2 style="margin-top: 1rem">Contact</h2>
+
+          <div class="form-header-wrapper">
+            <p>Phone number</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="phoneNumber" matInput type="text" />
+            </mat-form-field>
+          </div>
+          
+          <div class="form-header-wrapper">
+            <p>Home street</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="street" matInput type="text" />
+            </mat-form-field>
+          </div>
+          
+          <div class="form-header-wrapper">
+            <p>City</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="city" matInput type="text" />
+            </mat-form-field>
+          </div>
+           
+          <div class="form-header-wrapper">
+            <p>Country</p>
+            <mat-form-field required appearance="outline">
+              <input formControlName="country" matInput type="text" />
+            </mat-form-field>
+          </div>
+           
+          <input type="submit" class="submit-button" (click)="saveEditChanges()"/>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="cards" *ngIf="!editEnabled">
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title class="profile-title">
+            <img
+              mat-card-xl-image
+              src="../../../../assets/img/user.jpg"
+              alt="Image of a Shiba Inu"
+              class="image"
+            />
+            <h1>{{ employee.name }} {{ employee.surname }}</h1>
           </mat-card-title>
-          <mat-card-content>
-            <h2>Personal information</h2>
-            <p>
-              > Gender:
-              <b>{{ employee.gender == "FEMALE" ? "Female" : "Male" }}</b>
-            </p>
-            <p>
-              > Occupation: <b>{{ employee.occupation }}</b>
-            </p>
-            <p>
-              > Associated institution: <b>{{ employee.companyInfo }}</b>
-            </p>
-            <h2>Contact</h2>
-            <p>
-              > Home address:
-              <b
-                >{{ employee.street }}, {{ employee.City }},
-                {{ employee.Country }}</b
-              >
-            </p>
-            <p>
-              > Email: <b>{{ employee.email }}</b>
-            </p>
-            <p>
-              > Phone number: <b>{{ employee.phoneNumber }}</b>
-            </p>
-            
-          </mat-card-content>
-        </mat-card>
-      </div>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        <h2>Personal information</h2>
+        <p>
+          > Gender :
+          <b>{{ employee.gender == "FEMALE" ? "Female" : "Male" }}</b>
+        </p>
+        <p>
+          > Occupation : <b>{{ employee.occupation }}</b>
+        </p>
+        <p>
+          > Associated institution : <b>{{ employee.companyInfo }}</b>
+        </p>
+        <h2>Contact</h2>
+        <p>
+          > Home address :
+          <b
+            >{{ employee.street }}, {{ employee.city }},
+            {{ employee.country }}</b
+          >
+        </p>
+        <p>
+          > Email : <b>{{ employee.email }}</b>
+        </p>
+        <p>
+          > Phone number : <b>{{ employee.phoneNumber }}</b>
+        </p>
+        <br>
+        <mat-divider class="divider"></mat-divider>
+        <p>
+          <button class="password-field-button" (click)="editClicked()">
+            Edit profile
+          </button>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

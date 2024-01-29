@@ -5,7 +5,7 @@ import { AuthService } from './services/AuthService';
 
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering()
+    provideServerRendering(),
   ]
   
 };

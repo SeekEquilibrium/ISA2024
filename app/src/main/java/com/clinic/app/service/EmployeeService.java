@@ -1,6 +1,9 @@
 package com.clinic.app.service;
 
+import com.clinic.app.dto.EditEmployeeDTO;
+import com.clinic.app.dto.EmployeeDTO;
 import com.clinic.app.model.Employee;
+import com.clinic.app.model.Gender;
 import com.clinic.app.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,21 +28,24 @@ public class EmployeeService {
     }
 
     public Employee edit(Employee employee){
-        Employee from = employeeRepository.findById(employee.getId()).orElse(null);
+        Employee from = employeeRepository.findByEmail(employee.getEmail()).orElse(null);
         if(from == null){
             return null;
         } else {
-            from.setName(employee.getName());
-            from.setSurname(employee.getSurname());
-            from.setEmail(employee.getEmail());
-            from.setPassword(employee.getPassword());
-            from.setPhoneNumber(employee.getPhoneNumber());
-            from.setGender(employee.getGender());
-            from.setOccupation(employee.getOccupation());
-            from.setAdress(employee.getAdress());
-            from.setCompanyInfo(employee.getCompanyInfo());
+            Employee swapped = swapValue(from,employee);
 
-            return employeeRepository.save(from);
+            return employeeRepository.save(swapped);
         }
+    }
+
+    private Employee swapValue(Employee from , Employee employee){
+        from.setName(employee.getName());
+        from.setSurname(employee.getSurname());
+        from.setPhoneNumber(employee.getPhoneNumber());
+        from.setOccupation(employee.getOccupation());
+        from.setAdress(employee.getAdress());
+        from.setCompanyInfo(employee.getCompanyInfo());
+
+        return  from;
     }
 }

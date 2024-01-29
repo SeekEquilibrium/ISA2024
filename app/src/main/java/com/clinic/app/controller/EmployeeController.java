@@ -1,6 +1,7 @@
 package com.clinic.app.controller;
 
 import com.clinic.app.converter.EmployeeDTOConv;
+import com.clinic.app.dto.EditEmployeeDTO;
 import com.clinic.app.dto.EmployeeDTO;
 import com.clinic.app.model.Employee;
 import com.clinic.app.service.EmployeeService;
@@ -46,8 +47,8 @@ public class EmployeeController {
     }
     @PutMapping(value = "/edit")
     @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-    public ResponseEntity<EmployeeDTO> edit(@RequestBody EmployeeDTO employeeDTO){
-        Employee employee = employeeService.edit(employeeDTOConv.DTOToEmployee(employeeDTO));
+    public ResponseEntity<EmployeeDTO> edit(@RequestBody EditEmployeeDTO employeeDTO){
+        Employee employee = employeeService.edit(employeeDTOConv.DTOToEditEmployee(employeeDTO));
         if(employee==null){
             return ResponseEntity.notFound().build();
         }else{

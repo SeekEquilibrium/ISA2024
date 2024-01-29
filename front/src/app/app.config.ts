@@ -14,8 +14,9 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { AuthGuard } from './tools/Auth-guard';
 import { TokenInterceptor } from './tools/TokenInterceptor';
+import { RoleGuard } from './tools/Role-guard';
+import { AuthGuard } from './tools/Auth-guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +24,8 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(
       withHttpTransferCacheOptions({ includePostRequests: true })
     ),
+    AuthGuard,
+    RoleGuard,
     provideAnimations(),
     importProvidersFrom(HttpClientModule),
     provideHttpClient(withFetch(),withInterceptorsFromDi()),

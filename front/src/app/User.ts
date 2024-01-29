@@ -25,8 +25,21 @@ type Employee = {
     occupation:string;
     companyInfo:string;
     street:string;
-    City: string;
-    Country:string;
+    city: string;
+    country:string;
+  };
+
+  type EditEmployee = {
+    name: string;
+    surname: string;
+    email: string;
+    phoneNumber: string;
+    isVerified: boolean;
+    occupation:string;
+    companyInfo:string;
+    street:string;
+    city: string;
+    country:string;
   };
 
   type Credentials = {
@@ -34,4 +47,4 @@ type Employee = {
     password: string
   }
 
-  export {User,Employee,Credentials}
+  export {User,Employee,Credentials,EditEmployee}

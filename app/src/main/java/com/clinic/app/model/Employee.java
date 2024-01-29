@@ -32,4 +32,11 @@ public class Employee  extends UserApp{
         this.occupation = occupation;
         this.companyInfo = companyInfo;
     }
+
+    public Employee(long id, String name, String surname, String phoneNumber, Gender gender, boolean isVerified ,Role role, Adress adress, String occupation, String companyInfo) {
+        super(id, name, surname, phoneNumber, gender, isVerified, role);
+        this.adress = adress;
+        this.occupation = occupation;
+        this.companyInfo = companyInfo;
+    }
 }
